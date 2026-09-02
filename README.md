@@ -33,6 +33,7 @@ job-search rank data/raw/jobs.json --max-age-days 7
 job-search shortlist data/ranked/jobs.json
 job-search prepare data/ranked/jobs.json --index 0
 job-search track data/ranked/jobs.json --index 0 --status qualified
+job-search application-update --url JOB_URL --status confirmation_received
 job-search applications
 job-search run-all
 pytest
@@ -66,6 +67,9 @@ Maintains a private local application pipeline with stages from discovered and q
 ### `run-all`
 
 Runs discovery, ranking and shortlist generation as one fault-tolerant pipeline. Discovery retains jobs from previous runs, updates jobs seen again, and preserves successful source results when another source fails.
+It also creates `data/applications/queue.json`, a machine-readable, human-approved workflow queue. Every queued role requires location verification, a live-form AI-policy check, an ATS-readable PDF, human review, explicit submission approval, confirmation verification and inbox monitoring.
+
+See [the application automation workflow](docs/automation-workflow.md) for the weekday morning and evening orchestration contract, status transitions and access limits.
 
 ## Scheduled automation
 
