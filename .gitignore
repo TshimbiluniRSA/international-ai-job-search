@@ -10,6 +10,7 @@ private/
 data/raw/
 data/ranked/
 data/prepared/
+data/applications/
 dist/
 build/
 *.egg-info/
