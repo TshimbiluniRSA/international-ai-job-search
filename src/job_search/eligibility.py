@@ -4,13 +4,17 @@ import re
 
 from .models import EligibilityResult, Job
 
-
 INELIGIBLE_PATTERNS = {
     "US work authorization required": r"(?:must|should) (?:be )?(?:currently )?authorized to work in (?:the )?(?:u\.?s\.?|united states)",
     "US-only remote role": r"(?:remote[- ]?(?:us|usa)|(?:u\.?s\.?|united states) only|must (?:reside|live|be located) in (?:the )?(?:u\.?s\.?|united states))",
     "No sponsorship": r"(?:unable|not able) to (?:provide|offer) (?:visa )?sponsorship|no (?:visa )?sponsorship",
     "Security clearance": r"(?:active |eligible for )(?:u\.?s\.? )?(?:security )?clearance|u\.?s\.? citizen(?:ship)? required",
-    "On-site or hybrid": r"\b(?:on[- ]?site|hybrid)\b",
+    "On-site or hybrid": (
+        r"\b(?:on[- ]?site|onsite)\b"
+        r"|\bhybrid\s+(?:role|position|job|work(?:ing)?|schedule|arrangement|model)\b"
+        r"|\b(?:role|position|job|work(?:ing)?|schedule|arrangement|model)\s+is\s+hybrid\b"
+        r"|\bhybrid\s*[-–|,]\s*[a-z]"
+    ),
 }
 
 ELIGIBLE_PATTERNS = {
@@ -23,9 +27,9 @@ ELIGIBLE_PATTERNS = {
 
 
 def evaluate_eligibility(job: Job) -> EligibilityResult:
-    text = " ".join((job.title, job.location, job.description)).lower()
-    negative = [label for label, pattern in INELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.I)]
-    positive = [label for label, pattern in ELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.I)]
+    text = f"{job.title} {job.location} {job.description}".lower()
+    negative = [label for label, pattern in INELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.IGNORECASE)]
+    positive = [label for label, pattern in ELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.IGNORECASE)]
 
     # Explicit worldwide/SA/EOR/contractor evidence overrides a generic "US" location label,
     # but never an explicit citizenship, authorization, or clearance restriction.
