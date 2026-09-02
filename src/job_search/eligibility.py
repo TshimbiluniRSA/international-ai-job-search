@@ -18,7 +18,7 @@ ELIGIBLE_PATTERNS = {
     "International candidates": r"(?:international candidates|hire globally|global applicants|candidates worldwide)",
     "Contractor supported": r"(?:independent contractor|contractor agreement|b2b contract)",
     "Employer of Record supported": r"(?:employer of record|\beor\b)",
-    "South Africa accepted": r"(?:south africa|africa remote|remote.*emea|emea.*remote)",
+    "South Africa accepted": r"(?:south africa|africa remote|remote.{0,80}emea|emea.{0,80}remote)",
 }
 
 
