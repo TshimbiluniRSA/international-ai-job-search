@@ -29,8 +29,11 @@ source .venv/bin/activate
 pip install -e '.[dev]'
 cp config/sources.example.json config/sources.json
 job-search discover
-job-search rank data/raw/jobs.json
+job-search rank data/raw/jobs.json --max-age-days 7
+job-search shortlist data/ranked/jobs.json
 job-search prepare data/ranked/jobs.json --index 0
+job-search track data/ranked/jobs.json --index 0 --status qualified
+job-search applications
 pytest
 ```
 
@@ -45,10 +48,19 @@ Reads the Remote OK feed plus configured Greenhouse board tokens and Lever compa
 ### `rank`
 
 Runs a hard international-eligibility gate followed by explainable fit scoring. Results include strengths, gaps, eligibility evidence, and a recommendation.
+Jobs older than seven days are excluded by default. Sources without reliable posting dates remain included for manual verification.
 
 ### `prepare`
 
 Creates a Markdown dossier for one ranked job. It contains verified candidate evidence, CV emphasis recommendations, questions to verify, and draft prompts for a tailored CV and cover letter. It does not invent experience or submit anything.
+
+### `shortlist`
+
+Creates a review-friendly Markdown report containing only qualified or verification-needed roles, ordered by score.
+
+### `track` and `applications`
+
+Maintains a private local application pipeline with stages from discovered and qualified through interviews, offers, rejections and archives. Re-running `track` for the same job updates it instead of creating a duplicate.
 
 ## Safety boundaries
 
