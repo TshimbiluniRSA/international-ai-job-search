@@ -49,7 +49,17 @@ AI Automation, Docker and React/TypeScript can follow.
 
 ### Certifications
 
-Cybersecurity Essentials appears twice. Remove the duplicate and ensure Microsoft Azure Fundamentals (AZ-900) is visible alongside Azure AI Fundamentals (AI-900).
+The detailed LinkedIn certification view confirms that the two Cybersecurity Essentials records have different issue dates: May 2019 and July 2020. Do not automatically treat either as a duplicate. Keep both if they represent separately completed course editions; otherwise remove only the entry that cannot be supported by a certificate.
+
+The detailed view also confirms:
+
+- Microsoft Certified: Azure Fundamentals (AZ-900), issued December 2024, credential ID `1DBB5A6F8611D108`;
+- Microsoft Certified: Azure AI Fundamentals (AI-900), issued November 2024, credential ID `FE8F42234EED9E87`;
+- IoT Fundamentals: Connecting Things, issued July 2020;
+- Introduction to IoT, issued August 2019; and
+- Introduction to Cybersecurity, issued April 2019.
+
+The LinkedIn PDF summary omitted AZ-900 even though the detailed certification page contains it. No profile correction is required for AZ-900 unless it is missing from the live detailed view.
 
 ### Summary
 
