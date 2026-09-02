@@ -1,4 +1,4 @@
-.PHONY: install test lint discover rank shortlist run
+.PHONY: install test lint discover rank shortlist queue run
 
 install:
 	python -m pip install -e '.[dev]'
@@ -17,6 +17,9 @@ rank:
 
 shortlist:
 	job-search shortlist data/ranked/jobs.json
+
+queue:
+	job-search run-all
 
 run:
 	job-search run-all
