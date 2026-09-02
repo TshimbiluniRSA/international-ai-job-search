@@ -7,7 +7,6 @@ from typing import Any
 from .config import load_json, save_json
 from .models import RankedJob
 
-
 APPLICATION_STATUSES = {
     "discovered",
     "qualified",
@@ -27,7 +26,7 @@ def load_tracker(path: Path) -> list[dict[str, Any]]:
         return []
     value = load_json(path)
     if not isinstance(value, list):
-        raise ValueError("Application tracker must contain a JSON list")
+        raise TypeError("Application tracker must contain a JSON list")
     return value
 
 

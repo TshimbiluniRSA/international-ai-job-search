@@ -4,7 +4,6 @@ from pathlib import Path
 
 from .models import RankedJob
 
-
 INCLUDED_RECOMMENDATIONS = {
     "apply now",
     "good match",

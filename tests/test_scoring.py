@@ -1,7 +1,6 @@
 from job_search.models import Job
 from job_search.scoring import rank_job
 
-
 PROFILE = {
     "core_skills": ["python", "fastapi", "postgresql", "docker", "aws"],
     "skill_evidence": {"python": ["Production Python APIs"]},

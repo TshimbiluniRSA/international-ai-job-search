@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal
 
-
 EligibilityStatus = Literal["eligible", "ineligible", "verify"]
 
 
@@ -22,7 +21,7 @@ class Job:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, value: dict[str, Any]) -> "Job":
+    def from_dict(cls, value: dict[str, Any]) -> Job:
         allowed = cls.__dataclass_fields__.keys()
         return cls(**{key: value.get(key) for key in allowed})
 

@@ -6,7 +6,6 @@ from typing import Any
 from .eligibility import evaluate_eligibility
 from .models import Job, RankedJob
 
-
 ROLE_TERMS = {
     "python": ["python developer", "python engineer", "python"],
     "backend": ["backend engineer", "back-end engineer", "backend developer"],
@@ -15,16 +14,16 @@ ROLE_TERMS = {
     "ai-automation": ["ai engineer", "automation engineer", "llm engineer", "applied ai"],
 }
 
-SENIOR_ONLY = re.compile(r"\b(?:staff|principal|lead|director|manager|architect)\b", re.I)
+SENIOR_ONLY = re.compile(r"\b(?:staff|principal|lead|director|manager|architect)\b", re.IGNORECASE)
 
 
 def _contains(text: str, term: str) -> bool:
-    return re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text, re.I) is not None
+    return re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text, re.IGNORECASE) is not None
 
 
 def rank_job(job: Job, profile: dict[str, Any]) -> RankedJob:
     eligibility = evaluate_eligibility(job)
-    text = " ".join((job.title, job.description)).lower()
+    text = f"{job.title} {job.description}".lower()
     strengths: list[str] = []
     gaps: list[str] = []
 
@@ -36,7 +35,7 @@ def rank_job(job: Job, profile: dict[str, Any]) -> RankedJob:
         grounded = [
             f"{skill}: {evidence_map[skill][0]}"
             for skill in matched_skills
-            if skill in evidence_map and evidence_map[skill]
+            if evidence_map.get(skill)
         ]
         if grounded:
             strengths.append("Verified evidence: " + "; ".join(grounded[:3]))

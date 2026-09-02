@@ -1,0 +1,48 @@
+name: Scheduled job search
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 08:00 South Africa time, Monday-Friday.
+    - cron: "0 6 * * 1-5"
+
+permissions:
+  contents: read
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -e '.[dev]'
+
+      - name: Restore previous job history
+        uses: actions/cache@v4
+        with:
+          path: data/raw/jobs.json
+          key: job-history-${{ github.run_id }}
+          restore-keys: |
+            job-history-
+
+      - name: Run discovery pipeline
+        run: job-search run-all --sources config/sources.example.json
+
+      - name: Upload search results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: international-job-search-${{ github.run_number }}
+          path: |
+            data/raw/jobs.json
+            data/ranked/jobs.json
+            data/ranked/shortlist.md
+          if-no-files-found: warn
+          retention-days: 30
