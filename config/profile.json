@@ -15,7 +15,8 @@
     "celery", "sqlalchemy", "asyncpg", "docker", "aws", "azure", "azure kubernetes service",
     "react", "typescript", "graphql", "apollo client", "github actions", "azure devops",
     "ci/cd", "terraform", "openai", "azure openai", "llm", "rag", "automation",
-    "document intelligence", "pytest", "snyk", "sonarqube", "new relic"
+    "document intelligence", "microsoft graph", "sharepoint", "datalab",
+    "pytest", "snyk", "sonarqube", "new relic"
   ],
   "skill_evidence": {
     "python": ["Fluid production AP platform", "Sasol REST APIs and AI prototypes", "AI-powered portfolio"],
@@ -34,6 +35,9 @@
     "rag": ["Context-window-aware RAG assessment with explicit token budgets and overflow reporting"],
     "automation": ["High-volume AP workflows covering mailbox ingestion through downstream task management"],
     "document intelligence": ["Classification, structured extraction and CV/PDF processing workflows"],
+    "microsoft graph": ["Fluid mailbox and document workflow integrations"],
+    "sharepoint": ["Fluid downstream task-management and reconciliation workflows"],
+    "datalab": ["Fluid AI-assisted document extraction integration"],
     "ci/cd": ["Azure DevOps, GitHub Actions, Snyk, SonarQube and AWS OIDC workflows"]
   },
   "experience": [
@@ -46,6 +50,9 @@
         "Develop and support a production Accounts Payable automation platform using Python, Django REST Framework, Celery, PostgreSQL, Docker, React and TypeScript.",
         "Build REST APIs and asynchronous workflows spanning mailbox ingestion, document classification and extraction, invoice creation, UDMS submission and SharePoint task management.",
         "Improved duplicate prevention, idempotency and status controls.",
+        "Integrated OpenAI-powered processing, Datalab, Microsoft Graph and SharePoint into auditable document-processing workflows.",
+        "Strengthened reliability with explicit state transitions, race-condition protection, retry handling and safe reruns.",
+        "Optimised server-side tables, search, filtering and Excel exports for high-volume financial and document data.",
         "Built migration and reconciliation tooling for a dry run covering more than 77,000 task operations.",
         "Investigate production and UAT incidents across containers, databases, AWS infrastructure, document-processing services and external APIs."
       ]
@@ -146,6 +153,6 @@
     {"type": "cv", "name": "TT_Nedambale_CV_Software_Engineer(1).pdf", "date_verified": "2026-09-02"},
     {"type": "github", "url": "https://github.com/TshimbiluniRSA", "date_verified": "2026-09-02"},
     {"type": "portfolio", "url": "https://tshimbiluniportfolio.tech", "date_verified": "2026-09-02"},
-    {"type": "linkedin", "url": "https://linkedin.com/in/tshimbiluni-nedambale", "status": "export still required for full reconciliation"}
+    {"type": "linkedin", "url": "https://linkedin.com/in/tshimbiluni-nedambale", "name": "Profile.pdf", "date_verified": "2026-09-02"}
   ]
 }
