@@ -15,8 +15,12 @@ def _plain(value: str | None) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", value or ""))).strip()
 
 
+def _matches_keyword(text: str, keyword: str) -> bool:
+    return re.search(rf"(?<!\w){re.escape(keyword)}(?!\w)", text, re.I) is not None
+
+
 def normalize_remoteok(payload: list[dict[str, Any]], keywords: list[str]) -> list[Job]:
-    wanted = [keyword.casefold() for keyword in keywords]
+    wanted = [keyword.strip() for keyword in keywords if keyword.strip()]
     jobs: list[Job] = []
     for item in payload:
         if "position" not in item:  # The first API item contains feed metadata.
@@ -24,8 +28,11 @@ def normalize_remoteok(payload: list[dict[str, Any]], keywords: list[str]) -> li
         title = item.get("position", "")
         description = _plain(item.get("description"))
         tags = " ".join(item.get("tags") or [])
-        searchable = " ".join((title, description, tags)).casefold()
-        if wanted and not any(keyword in searchable for keyword in wanted):
+        # Discovery keywords must identify the role itself. Searching the full
+        # description creates false positives when unrelated jobs mention AI or
+        # automation as incidental tools.
+        searchable = " ".join((title, tags))
+        if wanted and not any(_matches_keyword(searchable, keyword) for keyword in wanted):
             continue
         jobs.append(
             Job(
@@ -35,7 +42,7 @@ def normalize_remoteok(payload: list[dict[str, Any]], keywords: list[str]) -> li
                 title=title,
                 location=item.get("location") or "Remote",
                 url=item.get("url", ""),
-                description=description,
+                description=f"{description} Tags: {tags}".strip(),
                 posted_at=item.get("date"),
             )
         )
