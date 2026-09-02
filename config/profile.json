@@ -135,7 +135,47 @@
       "graduated": "2024-04"
     }
   ],
-  "certifications": ["Microsoft Azure Fundamentals (AZ-900)", "Microsoft Azure AI Fundamentals (AI-900)"],
+  "certifications": [
+    {
+      "name": "Microsoft Certified: Azure Fundamentals",
+      "issuer": "Microsoft",
+      "issued": "2024-12",
+      "exam": "AZ-900",
+      "credential_id": "1DBB5A6F8611D108"
+    },
+    {
+      "name": "Microsoft Certified: Azure AI Fundamentals",
+      "issuer": "Microsoft",
+      "issued": "2024-11",
+      "exam": "AI-900",
+      "credential_id": "FE8F42234EED9E87"
+    },
+    {
+      "name": "IoT Fundamentals: Connecting Things",
+      "issuer": "Cisco Networking Academy",
+      "issued": "2020-07"
+    },
+    {
+      "name": "Cybersecurity Essentials",
+      "issuer": "Cisco Networking Academy",
+      "issued": "2020-07"
+    },
+    {
+      "name": "Cybersecurity Essentials",
+      "issuer": "Cisco Networking Academy",
+      "issued": "2019-05"
+    },
+    {
+      "name": "Introduction to IoT",
+      "issuer": "Cisco Networking Academy",
+      "issued": "2019-08"
+    },
+    {
+      "name": "Introduction to Cybersecurity",
+      "issuer": "Cisco Networking Academy",
+      "issued": "2019-04"
+    }
+  ],
   "languages": [
     {"name": "English", "level": "expert"},
     {"name": "Tshivenda", "level": "native"},
@@ -153,6 +193,6 @@
     {"type": "cv", "name": "TT_Nedambale_CV_Software_Engineer(1).pdf", "date_verified": "2026-09-02"},
     {"type": "github", "url": "https://github.com/TshimbiluniRSA", "date_verified": "2026-09-02"},
     {"type": "portfolio", "url": "https://tshimbiluniportfolio.tech", "date_verified": "2026-09-02"},
-    {"type": "linkedin", "url": "https://linkedin.com/in/tshimbiluni-nedambale", "name": "Profile.pdf", "date_verified": "2026-09-02"}
+    {"type": "linkedin", "url": "https://linkedin.com/in/tshimbiluni-nedambale", "name": "Profile.pdf and certifications detail", "date_verified": "2026-09-02"}
   ]
 }
