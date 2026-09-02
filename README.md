@@ -2,7 +2,7 @@
 
 A privacy-first job-search assistant for software engineers applying to international companies from South Africa.
 
-The first release discovers public Greenhouse and Lever postings, rejects location-incompatible roles, scores the remaining jobs against a structured candidate profile, and prepares an evidence-backed application dossier. It never submits an application.
+The first release discovers public Remote OK, Greenhouse and Lever postings, rejects location-incompatible roles, scores the remaining jobs against a structured candidate profile, and prepares an evidence-backed application dossier. It never submits an application.
 
 ## Tshimbiluni's target
 
@@ -40,7 +40,7 @@ On Windows PowerShell, activate the environment with `.venv\\Scripts\\Activate.p
 
 ### `discover`
 
-Reads configured Greenhouse board tokens and Lever company slugs, normalizes active postings, removes duplicates, and writes `data/raw/jobs.json`.
+Reads the Remote OK feed plus configured Greenhouse board tokens and Lever company slugs, normalizes active postings, removes duplicates, and writes `data/raw/jobs.json`. Remote OK results retain their direct source URLs and must be displayed with source attribution.
 
 ### `rank`
 
