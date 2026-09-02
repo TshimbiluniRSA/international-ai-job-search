@@ -9,6 +9,7 @@ from .prepare import create_dossier
 from .scoring import rank_job
 from .sources.greenhouse import fetch_greenhouse
 from .sources.lever import fetch_lever
+from .sources.remoteok import fetch_remoteok
 
 
 def discover(args: argparse.Namespace) -> int:
@@ -18,6 +19,9 @@ def discover(args: argparse.Namespace) -> int:
         jobs.extend(fetch_greenhouse(source["company"], source["board_token"]))
     for source in config.get("lever", []):
         jobs.extend(fetch_lever(source["company"], source["slug"]))
+    remoteok = config.get("remoteok") or {}
+    if remoteok.get("enabled"):
+        jobs.extend(fetch_remoteok(remoteok.get("keywords", [])))
 
     unique = {job.url or f"{job.source}:{job.source_id}": job for job in jobs}
     destination = save_json(args.output, [job.to_dict() for job in unique.values()])
