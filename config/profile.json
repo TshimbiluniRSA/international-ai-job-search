@@ -1,0 +1,35 @@
+{
+  "name": "Tshimbiluni Nedambale",
+  "location": "Roodepoort, Gauteng, South Africa",
+  "timezone": "Africa/Johannesburg",
+  "portfolio_url": "https://tshimbiluniportfolio.tech",
+  "github_url": "https://github.com/TshimbiluniRSA",
+  "linkedin_url": "https://linkedin.com/in/tshimbiluni-nedambale",
+  "target_roles": [
+    "Python Developer",
+    "Backend Engineer",
+    "Full-Stack Engineer",
+    "Software Engineer",
+    "AI Automation Engineer"
+  ],
+  "core_skills": [
+    "python", "django", "django rest framework", "fastapi", "rest api",
+    "postgresql", "sql", "celery", "docker", "aws", "azure",
+    "react", "typescript", "github actions", "ci/cd", "terraform",
+    "openai", "llm", "rag", "automation"
+  ],
+  "professional_evidence": [
+    "Production accounts-payable automation with Python, Django REST Framework, FastAPI, Celery, PostgreSQL, Docker, React and TypeScript",
+    "Document-intelligence and asynchronous workflow integration with production incident investigation",
+    "Migration and reconciliation tooling covering more than 77,000 task-creation operations",
+    "Enterprise AI and chatbot work with Azure OpenAI, Django, React, AKS, CI/CD, security scanning and monitoring"
+  ],
+  "portfolio_evidence": [
+    "React and TypeScript frontend with a FastAPI backend",
+    "AWS EC2, private PostgreSQL RDS, private S3, IAM, Nginx, HTTPS and Terraform",
+    "OpenAI-powered assistant, GitHub REST and GraphQL synchronization, and secure CV downloads"
+  ],
+  "employment_models": ["contractor", "employer_of_record", "direct_international"],
+  "requires_remote": true,
+  "home_country": "South Africa"
+}
