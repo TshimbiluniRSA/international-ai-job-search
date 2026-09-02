@@ -7,7 +7,6 @@ from typing import Any
 from ..models import Job
 from .http import get_json
 
-
 API_URL = "https://remoteok.com/api"
 
 
@@ -16,7 +15,7 @@ def _plain(value: str | None) -> str:
 
 
 def _matches_keyword(text: str, keyword: str) -> bool:
-    return re.search(rf"(?<!\w){re.escape(keyword)}(?!\w)", text, re.I) is not None
+    return re.search(rf"(?<!\w){re.escape(keyword)}(?!\w)", text, re.IGNORECASE) is not None
 
 
 def normalize_remoteok(payload: list[dict[str, Any]], keywords: list[str]) -> list[Job]:
@@ -31,7 +30,7 @@ def normalize_remoteok(payload: list[dict[str, Any]], keywords: list[str]) -> li
         # Discovery keywords must identify the role itself. Searching the full
         # description creates false positives when unrelated jobs mention AI or
         # automation as incidental tools.
-        searchable = " ".join((title, tags))
+        searchable = f"{title} {tags}"
         if wanted and not any(_matches_keyword(searchable, keyword) for keyword in wanted):
             continue
         jobs.append(
