@@ -27,3 +27,15 @@ def test_ineligible_role_is_always_zero() -> None:
     result = rank_job(job, PROFILE)
     assert result.score == 0
     assert result.recommendation == "reject"
+
+
+def test_senior_role_is_archived_for_early_career_profile() -> None:
+    job = Job(
+        "test", "3", "Acme", "Senior Python Backend Engineer", "Remote worldwide",
+        "https://example.com",
+        "Build Python FastAPI APIs using PostgreSQL, Docker and AWS.",
+    )
+    result = rank_job(job, PROFILE)
+    assert result.eligibility.status == "eligible"
+    assert result.recommendation == "archive"
+    assert "Seniority appears above the current primary target" in result.gaps
