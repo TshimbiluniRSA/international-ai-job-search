@@ -1,35 +1,151 @@
 {
-  "name": "Tshimbiluni Nedambale",
+  "schema_version": 2,
+  "name": "Tshimbiluni Theophillus Nedambale",
+  "headline": "Software Engineer | Python Backend, Applied AI & Full-Stack",
+  "positioning": "Python-focused software engineer building production backend systems, automation workflows and AI-enabled applications. Software engineering is the core positioning; applied AI and automation are differentiators.",
   "location": "Roodepoort, Gauteng, South Africa",
   "timezone": "Africa/Johannesburg",
   "portfolio_url": "https://tshimbiluniportfolio.tech",
   "github_url": "https://github.com/TshimbiluniRSA",
   "linkedin_url": "https://linkedin.com/in/tshimbiluni-nedambale",
-  "target_roles": [
-    "Python Developer",
-    "Backend Engineer",
-    "Full-Stack Engineer",
-    "Software Engineer",
-    "AI Automation Engineer"
-  ],
+  "target_roles": ["Python Developer", "Backend Engineer", "Full-Stack Engineer", "Software Engineer", "AI / Automation Engineer"],
+  "target_seniority": ["junior", "mid-level", "intermediate"],
   "core_skills": [
-    "python", "django", "django rest framework", "fastapi", "rest api",
-    "postgresql", "sql", "celery", "docker", "aws", "azure",
-    "react", "typescript", "github actions", "ci/cd", "terraform",
-    "openai", "llm", "rag", "automation"
+    "python", "django", "django rest framework", "fastapi", "rest api", "postgresql", "sql",
+    "celery", "sqlalchemy", "asyncpg", "docker", "aws", "azure", "azure kubernetes service",
+    "react", "typescript", "graphql", "apollo client", "github actions", "azure devops",
+    "ci/cd", "terraform", "openai", "azure openai", "llm", "rag", "automation",
+    "document intelligence", "pytest", "snyk", "sonarqube", "new relic"
   ],
-  "professional_evidence": [
-    "Production accounts-payable automation with Python, Django REST Framework, FastAPI, Celery, PostgreSQL, Docker, React and TypeScript",
-    "Document-intelligence and asynchronous workflow integration with production incident investigation",
-    "Migration and reconciliation tooling covering more than 77,000 task-creation operations",
-    "Enterprise AI and chatbot work with Azure OpenAI, Django, React, AKS, CI/CD, security scanning and monitoring"
+  "skill_evidence": {
+    "python": ["Fluid production AP platform", "Sasol REST APIs and AI prototypes", "AI-powered portfolio"],
+    "django": ["Fluid production AP platform", "Sasol internal platform modernisation"],
+    "fastapi": ["Sasol voice-chat prototype", "AI-powered portfolio", "Build with AI multilingual platform"],
+    "postgresql": ["Fluid AP platform", "AI-powered portfolio with private AWS RDS"],
+    "celery": ["Fluid asynchronous invoice and document-processing workflows"],
+    "react": ["Fluid AP frontend", "Sasol applications", "confidential permit platform", "portfolio"],
+    "typescript": ["Fluid AP frontend", "typed Apollo Client integration", "portfolio"],
+    "graphql": ["Typed queries, mutations, hooks and cache consistency for a confidential client"],
+    "docker": ["Fluid production support", "containerised portfolio deployment"],
+    "aws": ["EC2, Systems Manager, private RDS, private S3, IAM and Secrets Manager"],
+    "azure": ["AKS migration, Azure OpenAI and Azure DevOps at Sasol"],
+    "terraform": ["Production portfolio infrastructure with VPC segmentation, EC2, RDS, S3, IAM and GitHub OIDC"],
+    "openai": ["Portfolio assistant using the OpenAI Responses API"],
+    "rag": ["Context-window-aware RAG assessment with explicit token budgets and overflow reporting"],
+    "automation": ["High-volume AP workflows covering mailbox ingestion through downstream task management"],
+    "document intelligence": ["Classification, structured extraction and CV/PDF processing workflows"],
+    "ci/cd": ["Azure DevOps, GitHub Actions, Snyk, SonarQube and AWS OIDC workflows"]
+  },
+  "experience": [
+    {
+      "company": "Fluid",
+      "title": "Junior Python Developer",
+      "start": "2025-11",
+      "end": null,
+      "evidence": [
+        "Develop and support a production Accounts Payable automation platform using Python, Django REST Framework, Celery, PostgreSQL, Docker, React and TypeScript.",
+        "Build REST APIs and asynchronous workflows spanning mailbox ingestion, document classification and extraction, invoice creation, UDMS submission and SharePoint task management.",
+        "Improved duplicate prevention, idempotency and status controls.",
+        "Built migration and reconciliation tooling for a dry run covering more than 77,000 task operations.",
+        "Investigate production and UAT incidents across containers, databases, AWS infrastructure, document-processing services and external APIs."
+      ]
+    },
+    {
+      "company": "Permit Digital Platform (Confidential Client)",
+      "title": "Software Engineer — Freelance Project",
+      "start": "2025-12",
+      "end": "2026-01",
+      "evidence": [
+        "Implemented React and TypeScript features in an established codebase.",
+        "Built typed GraphQL queries, mutations and reusable Apollo Client hooks.",
+        "Integrated schema-driven models and managed client-side cache consistency."
+      ]
+    },
+    {
+      "company": "Sasol",
+      "title": "Graduate Trainee II — Junior AI/Software Engineer",
+      "start": "2025-08",
+      "end": "2025-11",
+      "evidence": [
+        "Contributed to AI solution architecture, technical research and enterprise enablement.",
+        "Co-developed the SHE enterprise knowledge chatbot.",
+        "Co-developed a digital screens application recognised by executive leadership.",
+        "Modernised a legacy .NET crowdsourcing platform with Django and React."
+      ]
+    },
+    {
+      "company": "Sasol",
+      "title": "Youth Development Programme Candidate — Full-Stack Developer Intern",
+      "start": "2024-08",
+      "end": "2025-07",
+      "evidence": [
+        "Designed secure Django REST Framework APIs integrated with React and TypeScript.",
+        "Developed a FastAPI, React and Azure OpenAI voice-chat prototype.",
+        "Helped migrate applications and databases to Azure Kubernetes Service.",
+        "Implemented CI/CD and DevSecOps practices with Azure DevOps, GitHub, Snyk, SonarQube and New Relic."
+      ]
+    },
+    {
+      "company": "Nedbank Corporate and Investment Banking",
+      "title": "YES Youth Intern — CIB Data Team",
+      "start": "2024-05",
+      "end": "2024-07",
+      "evidence": [
+        "Built a Microsoft Power App for business data requests.",
+        "Worked with enterprise data lifecycle, governance, lineage and quality concepts."
+      ]
+    }
   ],
-  "portfolio_evidence": [
-    "React and TypeScript frontend with a FastAPI backend",
-    "AWS EC2, private PostgreSQL RDS, private S3, IAM, Nginx, HTTPS and Terraform",
-    "OpenAI-powered assistant, GitHub REST and GraphQL synchronization, and secure CV downloads"
+  "selected_projects": [
+    {
+      "name": "AI-Powered Portfolio Platform",
+      "repository": "https://github.com/TshimbiluniRSA/Tshimbiluni-AI-powered-Portfolio",
+      "evidence": [
+        "Production React and TypeScript frontend with a FastAPI API and PostgreSQL persistence.",
+        "OpenAI assistant, GitHub REST and GraphQL synchronisation, and CV parsing.",
+        "AWS EC2, private RDS, private S3, IAM, Systems Manager, Nginx, HTTPS, Docker and Terraform."
+      ]
+    },
+    {
+      "name": "Multilingual Educational Content Platform",
+      "repository": "https://github.com/TshimbiluniRSA/BuildwithAI-buildathon",
+      "evidence": [
+        "FastAPI, React, TypeScript, Gemini 2.5 Flash, Pydantic, PDF extraction and YouTube transcript processing.",
+        "Placed in the Top 3 at GDG Johannesburg Build with AI 2026."
+      ]
+    },
+    {
+      "name": "Context-Window-Aware RAG System",
+      "repository": "https://github.com/TshimbiluniRSA/Context-Window-Aware-RAG-Deloitte-assessment-",
+      "evidence": ["Explicit context budgets, relevance-based retrieval selection and transparent overflow reporting."]
+    }
+  ],
+  "education": [
+    {
+      "qualification": "Bachelor of Science in Information Technology",
+      "institution": "North-West University",
+      "completed": "2023-12",
+      "graduated": "2024-04"
+    }
+  ],
+  "certifications": ["Microsoft Azure Fundamentals (AZ-900)", "Microsoft Azure AI Fundamentals (AI-900)"],
+  "languages": [
+    {"name": "English", "level": "expert"},
+    {"name": "Tshivenda", "level": "native"},
+    {"name": "IsiZulu", "level": "intermediate"},
+    {"name": "Sepedi", "level": "intermediate"}
   ],
   "employment_models": ["contractor", "employer_of_record", "direct_international"],
   "requires_remote": true,
-  "home_country": "South Africa"
+  "home_country": "South Africa",
+  "eligibility_policy": {
+    "accept": ["worldwide remote", "South Africa", "EMEA", "international contractor", "Employer of Record"],
+    "reject": ["US residents only", "US work authorization required", "US citizenship required", "security clearance required", "US onsite or hybrid"]
+  },
+  "source_registry": [
+    {"type": "cv", "name": "TT_Nedambale_CV_Software_Engineer(1).pdf", "date_verified": "2026-09-02"},
+    {"type": "github", "url": "https://github.com/TshimbiluniRSA", "date_verified": "2026-09-02"},
+    {"type": "portfolio", "url": "https://tshimbiluniportfolio.tech", "date_verified": "2026-09-02"},
+    {"type": "linkedin", "url": "https://linkedin.com/in/tshimbiluni-nedambale", "status": "export still required for full reconciliation"}
+  ]
 }
