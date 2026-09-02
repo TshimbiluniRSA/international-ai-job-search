@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import sys
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -30,7 +32,7 @@ def _is_recent(job: Job, max_age_days: int) -> bool:
     if not job.posted_at:
         return True  # Unknown posting dates remain reviewable rather than silently disappearing.
     try:
-        posted = datetime.fromisoformat(job.posted_at.replace("Z", "+00:00"))
+        posted = datetime.fromisoformat(job.posted_at)
     except ValueError:
         return True
     if posted.tzinfo is None:
@@ -38,20 +40,91 @@ def _is_recent(job: Job, max_age_days: int) -> bool:
     return posted >= datetime.now(UTC) - timedelta(days=max_age_days)
 
 
+def _job_key(job: Job) -> str:
+    if job.url.strip():
+        return job.url.strip().casefold()
+    return f"{job.source}:{job.source_id}".casefold()
+
+
+def _existing_jobs(path: Path) -> list[Job]:
+    if not path.exists():
+        return []
+    payload = load_json(path)
+    if not isinstance(payload, list):
+        raise TypeError(f"Existing job history at {path} must contain a JSON list")
+    return [Job.from_dict(item) for item in payload]
+
+
 def discover(args: argparse.Namespace) -> int:
     config = load_json(args.sources)
-    jobs: list[Job] = []
+    source_calls: list[tuple[str, Callable[[], list[Job]]]] = []
     for source in config.get("greenhouse", []):
-        jobs.extend(fetch_greenhouse(source["company"], source["board_token"]))
+        source_calls.append(
+            (
+                f"greenhouse:{source['company']}",
+                lambda source=source: fetch_greenhouse(
+                    source["company"], source["board_token"]
+                ),
+            )
+        )
     for source in config.get("lever", []):
-        jobs.extend(fetch_lever(source["company"], source["slug"]))
+        source_calls.append(
+            (
+                f"lever:{source['company']}",
+                lambda source=source: fetch_lever(source["company"], source["slug"]),
+            )
+        )
     remoteok = config.get("remoteok") or {}
     if remoteok.get("enabled"):
-        jobs.extend(fetch_remoteok(remoteok.get("keywords", [])))
+        source_calls.append(
+            (
+                "remoteok",
+                lambda: fetch_remoteok(remoteok.get("keywords", [])),
+            )
+        )
 
-    unique = {job.url or f"{job.source}:{job.source_id}": job for job in jobs}
-    destination = save_json(args.output, [job.to_dict() for job in unique.values()])
-    print(f"Saved {len(unique)} unique jobs to {destination}")
+    if not source_calls:
+        print("No enabled job sources are configured.", file=sys.stderr)
+        return 1
+
+    fetched: list[Job] = []
+    failures: list[str] = []
+    for label, fetch in source_calls:
+        try:
+            source_jobs = fetch()
+        # A third-party adapter must not discard results from healthy adapters,
+        # including when its failure is an unexpected parser defect.
+        except Exception as error:  # noqa: BLE001
+            failures.append(label)
+            print(f"Warning: {label} failed: {error}", file=sys.stderr)
+            continue
+        fetched.extend(source_jobs)
+        print(f"Fetched {len(source_jobs)} job(s) from {label}")
+
+    if len(failures) == len(source_calls):
+        print("Every configured job source failed; existing history was preserved.", file=sys.stderr)
+        return 1
+
+    try:
+        existing = _existing_jobs(args.output)
+    except (OSError, ValueError, TypeError) as error:
+        print(f"Cannot safely merge existing job history: {error}", file=sys.stderr)
+        return 1
+
+    merged = {_job_key(job): job for job in existing}
+    before = len(merged)
+    merged.update({_job_key(job): job for job in fetched})
+    jobs = sorted(
+        merged.values(),
+        key=lambda job: job.posted_at or "",
+        reverse=True,
+    )
+    destination = save_json(args.output, [job.to_dict() for job in jobs])
+    added = len(merged) - before
+    print(
+        f"Saved {len(merged)} unique jobs to {destination} "
+        f"({added} new, {len(failures)} source failure(s))"
+    )
     return 0
 
 
@@ -112,6 +185,34 @@ def applications(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_all(args: argparse.Namespace) -> int:
+    discover_status = discover(
+        argparse.Namespace(sources=args.sources, output=args.raw_output)
+    )
+    if discover_status and not args.raw_output.exists():
+        return discover_status
+
+    rank_status = rank(
+        argparse.Namespace(
+            profile=args.profile,
+            jobs=args.raw_output,
+            max_age_days=args.max_age_days,
+            output=args.ranked_output,
+        )
+    )
+    if rank_status:
+        return rank_status
+
+    shortlist_status = shortlist(
+        argparse.Namespace(
+            jobs=args.ranked_output,
+            output=args.shortlist_output,
+            limit=args.limit,
+        )
+    )
+    return discover_status or shortlist_status
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="job-search")
     commands = root.add_subparsers(dest="command", required=True)
@@ -164,6 +265,30 @@ def parser() -> argparse.ArgumentParser:
         "--tracker", default=ROOT / "data" / "applications" / "tracker.json", type=Path
     )
     applications_parser.set_defaults(handler=applications)
+
+    run_all_parser = commands.add_parser(
+        "run-all", help="Discover, rank and create a shortlist in one command"
+    )
+    run_all_parser.add_argument(
+        "--sources", default=ROOT / "config" / "sources.json", type=Path
+    )
+    run_all_parser.add_argument(
+        "--profile", default=ROOT / "config" / "profile.json", type=Path
+    )
+    run_all_parser.add_argument(
+        "--raw-output", default=ROOT / "data" / "raw" / "jobs.json", type=Path
+    )
+    run_all_parser.add_argument(
+        "--ranked-output", default=ROOT / "data" / "ranked" / "jobs.json", type=Path
+    )
+    run_all_parser.add_argument(
+        "--shortlist-output",
+        default=ROOT / "data" / "ranked" / "shortlist.md",
+        type=Path,
+    )
+    run_all_parser.add_argument("--max-age-days", type=int, default=7)
+    run_all_parser.add_argument("--limit", type=int, default=20)
+    run_all_parser.set_defaults(handler=run_all)
     return root
 
 
