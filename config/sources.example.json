@@ -1,0 +1,8 @@
+{
+  "greenhouse": [
+    {"company": "example", "board_token": "example"}
+  ],
+  "lever": [
+    {"company": "example", "slug": "example"}
+  ]
+}
