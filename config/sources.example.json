@@ -1,8 +1,8 @@
 {
-  "greenhouse": [
-    {"company": "example", "board_token": "example"}
-  ],
-  "lever": [
-    {"company": "example", "slug": "example"}
-  ]
+  "greenhouse": [],
+  "lever": [],
+  "remoteok": {
+    "enabled": true,
+    "keywords": ["python", "backend", "software engineer", "full stack", "ai", "automation"]
+  }
 }
