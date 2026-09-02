@@ -39,3 +39,24 @@ def test_explicit_hybrid_work_rejects_role() -> None:
         job("Johannesburg", "This is a hybrid working arrangement with three office days.")
     )
     assert result.status == "ineligible"
+
+
+def test_accepts_worldwide_job_board_location() -> None:
+    result = evaluate_eligibility(
+        job("Home based - Worldwide", "Build Python services for a distributed team.")
+    )
+    assert result.status == "eligible"
+
+
+def test_rejects_country_specific_remote_location() -> None:
+    result = evaluate_eligibility(
+        job("Remote, Canada", "Build Python services for a distributed team.")
+    )
+    assert result.status == "ineligible"
+
+
+def test_rejects_non_remote_foreign_location() -> None:
+    result = evaluate_eligibility(
+        job("Bangalore, India", "Build Python services for a distributed team.")
+    )
+    assert result.status == "ineligible"
