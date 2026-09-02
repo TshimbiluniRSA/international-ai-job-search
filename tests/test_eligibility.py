@@ -19,3 +19,9 @@ def test_accepts_global_contractor_role() -> None:
 def test_marks_ambiguous_remote_role_for_verification() -> None:
     result = evaluate_eligibility(job("Remote", "Join our distributed engineering team."))
     assert result.status == "verify"
+
+
+def test_does_not_treat_distant_emea_mention_as_remote_eligibility() -> None:
+    description = "Remote team. " + ("unrelated text " * 20) + "EMEA sales office."
+    result = evaluate_eligibility(job("Remote", description))
+    assert result.status == "verify"
