@@ -34,6 +34,7 @@ job-search shortlist data/ranked/jobs.json
 job-search prepare data/ranked/jobs.json --index 0
 job-search track data/ranked/jobs.json --index 0 --status qualified
 job-search applications
+job-search run-all
 pytest
 ```
 
@@ -61,6 +62,22 @@ Creates a review-friendly Markdown report containing only qualified or verificat
 ### `track` and `applications`
 
 Maintains a private local application pipeline with stages from discovered and qualified through interviews, offers, rejections and archives. Re-running `track` for the same job updates it instead of creating a duplicate.
+
+### `run-all`
+
+Runs discovery, ranking and shortlist generation as one fault-tolerant pipeline. Discovery retains jobs from previous runs, updates jobs seen again, and preserves successful source results when another source fails.
+
+## Scheduled automation
+
+The scheduled GitHub Actions workflow runs at 08:00 South Africa time from Monday to Friday and can also be started manually. It restores job history between ephemeral runners, executes `run-all`, and uploads the raw jobs, ranked results and shortlist as a private workflow artifact retained for 30 days.
+
+For local convenience:
+
+```bash
+make install
+make test
+make run
+```
 
 ## Safety boundaries
 
