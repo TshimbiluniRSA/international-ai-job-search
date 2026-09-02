@@ -25,11 +25,30 @@ ELIGIBLE_PATTERNS = {
     "South Africa accepted": r"(?:south africa|africa remote|remote.{0,80}emea|emea.{0,80}remote)",
 }
 
+LOCATION_ELIGIBLE = re.compile(
+    r"\b(?:worldwide|global|south africa|africa|emea)\b",
+    re.IGNORECASE,
+)
+
+
+def _location_evidence(job: Job) -> tuple[list[str], list[str]]:
+    location = job.location.strip()
+    if not location:
+        return [], []
+    if LOCATION_ELIGIBLE.search(location):
+        return [], ["Job-board location permits South Africa or a broader region"]
+    if location.casefold() in {"remote", "anywhere", "home based", "home-based"}:
+        return [], []
+    return ["Job-board location is restricted outside South Africa"], []
+
 
 def evaluate_eligibility(job: Job) -> EligibilityResult:
     text = f"{job.title} {job.location} {job.description}".lower()
     negative = [label for label, pattern in INELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.IGNORECASE)]
     positive = [label for label, pattern in ELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.IGNORECASE)]
+    location_negative, location_positive = _location_evidence(job)
+    negative.extend(location_negative)
+    positive.extend(location_positive)
 
     # Explicit worldwide/SA/EOR/contractor evidence overrides a generic "US" location label,
     # but never an explicit citizenship, authorization, or clearance restriction.

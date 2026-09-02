@@ -1,6 +1,20 @@
 {
-  "greenhouse": [],
-  "lever": [],
+  "greenhouse": [
+    {"company": "Canonical", "board_token": "canonical"},
+    {"company": "GitLab", "board_token": "gitlab"},
+    {"company": "Remote", "board_token": "remotecom"},
+    {"company": "Sourcegraph", "board_token": "sourcegraph91"},
+    {"company": "Wikimedia Foundation", "board_token": "wikimedia"},
+    {"company": "Testlio", "board_token": "testlio"}
+  ],
+  "lever": [
+    {"company": "Superside", "slug": "superside"},
+    {"company": "Binance", "slug": "binance"},
+    {"company": "HighLevel", "slug": "gohighlevel"},
+    {"company": "Distru", "slug": "distru"},
+    {"company": "Supermove", "slug": "supermove"},
+    {"company": "Voltus", "slug": "voltus"}
+  ],
   "remoteok": {
     "enabled": true,
     "keywords": ["python", "backend", "software engineer", "full stack", "ai", "automation"]
