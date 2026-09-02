@@ -32,6 +32,14 @@ def rank_job(job: Job, profile: dict[str, Any]) -> RankedJob:
     skill_score = min(45, len(matched_skills) * 5)
     if matched_skills:
         strengths.append("Matching skills: " + ", ".join(matched_skills[:9]))
+        evidence_map = profile.get("skill_evidence", {})
+        grounded = [
+            f"{skill}: {evidence_map[skill][0]}"
+            for skill in matched_skills
+            if skill in evidence_map and evidence_map[skill]
+        ]
+        if grounded:
+            strengths.append("Verified evidence: " + "; ".join(grounded[:3]))
     else:
         gaps.append("No explicit core-skill match found")
 
