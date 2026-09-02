@@ -11,7 +11,10 @@ Help Tshimbiluni Nedambale find and prepare high-quality applications for intern
 3. Run `job-search rank` before recommending any role.
 4. Treat `ineligible` as a hard rejection and `verify` as a required human check.
 5. Run `job-search prepare` only for shortlisted roles.
-6. Present application material for user approval; never submit it.
+6. Inspect the live application form for AI-use restrictions before generating application material.
+7. Use PDF as the primary tailored CV format.
+8. Present application material for user approval and require explicit approval before final submission.
+9. Verify the confirmation page or confirmation email before recording a successful submission.
 
 ## Target roles
 
@@ -29,6 +32,7 @@ Help Tshimbiluni Nedambale find and prepare high-quality applications for intern
 - Reject explicit US-residency, US-work-authorization, citizenship, clearance, onsite, and incompatible hybrid requirements.
 - Prefer worldwide remote, South Africa, EMEA, contractor, and Employer-of-Record eligibility evidence.
 - Never commit files under `private/`, secrets, generated applications, or application history.
+- Do not generate application content where the employer prohibits AI-assisted material.
 - Do not automate final application submission, screening-question answers, emails, or messages without a separate explicit instruction and final user review.
 
 ## Engineering standards
