@@ -14,7 +14,10 @@ ROLE_TERMS = {
     "ai-automation": ["ai engineer", "automation engineer", "llm engineer", "applied ai"],
 }
 
-SENIOR_ONLY = re.compile(r"\b(?:staff|principal|lead|director|manager|architect)\b", re.IGNORECASE)
+SENIOR_ONLY = re.compile(
+    r"\b(?:senior|sr\.?|staff|principal|lead|director|manager|architect)\b",
+    re.IGNORECASE,
+)
 
 
 def _contains(text: str, term: str) -> bool:
@@ -55,8 +58,9 @@ def rank_job(job: Job, profile: dict[str, Any]) -> RankedJob:
     if evidence_score == 15:
         strengths.append("The role maps to documented production or portfolio evidence")
 
+    above_target = SENIOR_ONLY.search(job.title) is not None
     level_score = 10
-    if SENIOR_ONLY.search(job.title):
+    if above_target:
         level_score = 0
         gaps.append("Seniority appears above the current primary target")
 
@@ -66,6 +70,8 @@ def rank_job(job: Job, profile: dict[str, Any]) -> RankedJob:
     if eligibility.status == "ineligible":
         recommendation = "reject"
         score = 0
+    elif above_target:
+        recommendation = "archive"
     elif eligibility.status == "verify":
         recommendation = "verify hiring location" if score >= 50 else "archive"
     elif score >= 80:
