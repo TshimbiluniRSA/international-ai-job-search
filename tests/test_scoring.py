@@ -3,7 +3,8 @@ from job_search.scoring import rank_job
 
 
 PROFILE = {
-    "core_skills": ["python", "fastapi", "postgresql", "docker", "aws"]
+    "core_skills": ["python", "fastapi", "postgresql", "docker", "aws"],
+    "skill_evidence": {"python": ["Production Python APIs"]},
 }
 
 
@@ -16,6 +17,7 @@ def test_matching_global_backend_role_scores_and_is_eligible() -> None:
     assert result.eligibility.status == "eligible"
     assert result.score >= 65
     assert result.recommendation in {"apply now", "good match"}
+    assert any("Verified evidence" in strength for strength in result.strengths)
 
 
 def test_ineligible_role_is_always_zero() -> None:
