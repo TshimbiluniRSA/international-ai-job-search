@@ -14,7 +14,8 @@ from .shortlist import create_shortlist
 from .sources.greenhouse import fetch_greenhouse
 from .sources.lever import fetch_lever
 from .sources.remoteok import fetch_remoteok
-from .tracking import APPLICATION_STATUSES, load_tracker, track_job
+from .tracking import APPLICATION_STATUSES, load_tracker, track_job, update_application
+from .workflow import create_application_queue
 
 
 def _ranked_from_dict(item: dict) -> RankedJob:
@@ -164,11 +165,20 @@ def track(args: argparse.Namespace) -> int:
     payload = load_json(args.jobs)
     if args.index < 0 or args.index >= len(payload):
         raise SystemExit(f"--index must be between 0 and {len(payload) - 1}")
+    metadata = {
+        "cv_path": args.cv_path,
+        "application_policy": args.application_policy,
+        "confirmation_email_id": args.confirmation_email_id,
+        "last_email_at": args.last_email_at,
+        "next_action": args.next_action,
+        "next_action_due": args.next_action_due,
+    }
     record = track_job(
         _ranked_from_dict(payload[args.index]),
         args.tracker,
         args.status,
         args.notes,
+        metadata,
     )
     print(f"Tracked {record['company']} — {record['title']} as {record['status']}")
     return 0
@@ -210,7 +220,34 @@ def run_all(args: argparse.Namespace) -> int:
             limit=args.limit,
         )
     )
+    ranked_items = [_ranked_from_dict(item) for item in load_json(args.ranked_output)]
+    queue_destination = create_application_queue(
+        ranked_items,
+        args.queue_output,
+        args.queue_limit,
+    )
+    print(f"Created human-approved application queue at {queue_destination}")
     return discover_status or shortlist_status
+
+
+def application_update(args: argparse.Namespace) -> int:
+    metadata = {
+        "cv_path": args.cv_path,
+        "application_policy": args.application_policy,
+        "confirmation_email_id": args.confirmation_email_id,
+        "last_email_at": args.last_email_at,
+        "next_action": args.next_action,
+        "next_action_due": args.next_action_due,
+    }
+    record = update_application(
+        args.tracker,
+        args.url,
+        args.status,
+        args.notes,
+        metadata,
+    )
+    print(f"Updated {record['company']} — {record['title']} to {record['status']}")
+    return 0
 
 
 def parser() -> argparse.ArgumentParser:
@@ -254,10 +291,40 @@ def parser() -> argparse.ArgumentParser:
     track_parser.add_argument("--index", type=int, required=True)
     track_parser.add_argument("--status", choices=sorted(APPLICATION_STATUSES), required=True)
     track_parser.add_argument("--notes")
+    track_parser.add_argument("--cv-path")
+    track_parser.add_argument(
+        "--application-policy",
+        choices=["unchecked", "ai_allowed", "ai_restricted", "manual_review"],
+    )
+    track_parser.add_argument("--confirmation-email-id")
+    track_parser.add_argument("--last-email-at")
+    track_parser.add_argument("--next-action")
+    track_parser.add_argument("--next-action-due")
     track_parser.add_argument(
         "--tracker", default=ROOT / "data" / "applications" / "tracker.json", type=Path
     )
     track_parser.set_defaults(handler=track)
+
+    update_parser = commands.add_parser(
+        "application-update",
+        help="Update an existing tracked application by its job URL",
+    )
+    update_parser.add_argument("--url", required=True)
+    update_parser.add_argument("--status", choices=sorted(APPLICATION_STATUSES), required=True)
+    update_parser.add_argument("--notes")
+    update_parser.add_argument("--cv-path")
+    update_parser.add_argument(
+        "--application-policy",
+        choices=["unchecked", "ai_allowed", "ai_restricted", "manual_review"],
+    )
+    update_parser.add_argument("--confirmation-email-id")
+    update_parser.add_argument("--last-email-at")
+    update_parser.add_argument("--next-action")
+    update_parser.add_argument("--next-action-due")
+    update_parser.add_argument(
+        "--tracker", default=ROOT / "data" / "applications" / "tracker.json", type=Path
+    )
+    update_parser.set_defaults(handler=application_update)
 
     applications_parser = commands.add_parser("applications", help="List tracked applications")
     applications_parser.add_argument("--status", choices=sorted(APPLICATION_STATUSES))
@@ -288,6 +355,12 @@ def parser() -> argparse.ArgumentParser:
     )
     run_all_parser.add_argument("--max-age-days", type=int, default=7)
     run_all_parser.add_argument("--limit", type=int, default=20)
+    run_all_parser.add_argument(
+        "--queue-output",
+        default=ROOT / "data" / "applications" / "queue.json",
+        type=Path,
+    )
+    run_all_parser.add_argument("--queue-limit", type=int, default=10)
     run_all_parser.set_defaults(handler=run_all)
     return root
 
