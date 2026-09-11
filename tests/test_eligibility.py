@@ -19,7 +19,7 @@ def test_accepts_global_contractor_role() -> None:
 def test_accepts_unrestricted_remote_role_provisionally() -> None:
     result = evaluate_eligibility(job("Remote", "Join our distributed engineering team."))
     assert result.status == "eligible"
-    assert any("no geographic restriction" in evidence for evidence in result.positive_evidence)
+    assert any("no geographic restriction" in evidence for evidence in result.evidence)
 
 
 def test_does_not_treat_distant_emea_mention_as_remote_eligibility() -> None:
