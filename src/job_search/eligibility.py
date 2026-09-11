@@ -47,8 +47,10 @@ def _location_evidence(job: Job) -> tuple[list[str], list[str]]:
         return [], ["Job-board location permits South Africa or a broader region"]
     if location.casefold() in UNRESTRICTED_REMOTE_LOCATIONS:
         return [], [
-            "Posting is remote and states no geographic restriction; "
-            "confirm eligibility during application"
+            (
+                "Posting is remote and states no geographic restriction; "
+                "confirm eligibility during application"
+            )
         ]
     return ["Job-board location is restricted outside South Africa"], []
 
