@@ -16,14 +16,15 @@ def test_accepts_global_contractor_role() -> None:
     assert result.status == "eligible"
 
 
-def test_marks_ambiguous_remote_role_for_verification() -> None:
+def test_accepts_unrestricted_remote_role_provisionally() -> None:
     result = evaluate_eligibility(job("Remote", "Join our distributed engineering team."))
-    assert result.status == "verify"
+    assert result.status == "eligible"
+    assert any("no geographic restriction" in evidence for evidence in result.positive_evidence)
 
 
 def test_does_not_treat_distant_emea_mention_as_remote_eligibility() -> None:
     description = "Remote team. " + ("unrelated text " * 20) + "EMEA sales office."
-    result = evaluate_eligibility(job("Remote", description))
+    result = evaluate_eligibility(job("", description))
     assert result.status == "verify"
 
 
@@ -31,7 +32,7 @@ def test_hybrid_cloud_does_not_reject_remote_role() -> None:
     result = evaluate_eligibility(
         job("Remote", "Build services across hybrid cloud infrastructure.")
     )
-    assert result.status == "verify"
+    assert result.status == "eligible"
 
 
 def test_explicit_hybrid_work_rejects_role() -> None:

@@ -30,6 +30,14 @@ LOCATION_ELIGIBLE = re.compile(
     re.IGNORECASE,
 )
 
+UNRESTRICTED_REMOTE_LOCATIONS = {
+    "remote",
+    "anywhere",
+    "home based",
+    "home-based",
+    "fully remote",
+}
+
 
 def _location_evidence(job: Job) -> tuple[list[str], list[str]]:
     location = job.location.strip()
@@ -37,15 +45,26 @@ def _location_evidence(job: Job) -> tuple[list[str], list[str]]:
         return [], []
     if LOCATION_ELIGIBLE.search(location):
         return [], ["Job-board location permits South Africa or a broader region"]
-    if location.casefold() in {"remote", "anywhere", "home based", "home-based"}:
-        return [], []
+    if location.casefold() in UNRESTRICTED_REMOTE_LOCATIONS:
+        return [], [
+            "Posting is remote and states no geographic restriction; "
+            "confirm eligibility during application"
+        ]
     return ["Job-board location is restricted outside South Africa"], []
 
 
 def evaluate_eligibility(job: Job) -> EligibilityResult:
     text = f"{job.title} {job.location} {job.description}".lower()
-    negative = [label for label, pattern in INELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.IGNORECASE)]
-    positive = [label for label, pattern in ELIGIBLE_PATTERNS.items() if re.search(pattern, text, re.IGNORECASE)]
+    negative = [
+        label
+        for label, pattern in INELIGIBLE_PATTERNS.items()
+        if re.search(pattern, text, re.IGNORECASE)
+    ]
+    positive = [
+        label
+        for label, pattern in ELIGIBLE_PATTERNS.items()
+        if re.search(pattern, text, re.IGNORECASE)
+    ]
     location_negative, location_positive = _location_evidence(job)
     negative.extend(location_negative)
     positive.extend(location_positive)
@@ -59,6 +78,6 @@ def evaluate_eligibility(job: Job) -> EligibilityResult:
         return EligibilityResult("eligible", [], positive)
     return EligibilityResult(
         "verify",
-        ["The posting does not clearly confirm hiring from South Africa"],
+        ["The posting does not clearly describe an unrestricted remote role"],
         [],
     )

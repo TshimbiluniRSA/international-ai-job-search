@@ -6,6 +6,8 @@ from typing import Any
 from .eligibility import evaluate_eligibility
 from .models import Job, RankedJob
 
+APPLICATION_THRESHOLD = 70
+
 ROLE_TERMS = {
     "python": ["python developer", "python engineer", "python"],
     "backend": ["backend engineer", "back-end engineer", "backend developer"],
@@ -73,13 +75,11 @@ def rank_job(job: Job, profile: dict[str, Any]) -> RankedJob:
     elif above_target:
         recommendation = "archive"
     elif eligibility.status == "verify":
-        recommendation = "verify hiring location" if score >= 50 else "archive"
-    elif score >= 80:
+        recommendation = (
+            "verify hiring location" if score >= APPLICATION_THRESHOLD else "archive"
+        )
+    elif score >= APPLICATION_THRESHOLD:
         recommendation = "apply now"
-    elif score >= 65:
-        recommendation = "good match"
-    elif score >= 50:
-        recommendation = "manual review"
     else:
         recommendation = "archive"
 
