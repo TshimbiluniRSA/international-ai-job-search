@@ -3,8 +3,8 @@ name: Scheduled job search
 on:
   workflow_dispatch:
   schedule:
-    # 08:00 South Africa time, Monday-Friday.
-    - cron: "0 6 * * 1-5"
+    # 07:30 South Africa time, Monday-Friday. This gives the 08:00 report time to consume the completed artifact.
+    - cron: "30 5 * * 1-5"
 
 concurrency:
   group: scheduled-job-search
