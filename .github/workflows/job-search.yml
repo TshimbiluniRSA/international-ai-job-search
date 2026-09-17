@@ -3,8 +3,11 @@ name: Scheduled job search
 on:
   workflow_dispatch:
   schedule:
-    # 07:30 South Africa time, Monday-Friday. This gives the 08:00 report time to consume the completed artifact.
-    - cron: "30 5 * * 1-5"
+    # Three weekday attempts in South Africa Standard Time (UTC+2).
+    # Later attempts skip automatically after the first successful search.
+    - cron: "45 4 * * 1-5" # 06:45 SAST
+    - cron: "15 5 * * 1-5" # 07:15 SAST
+    - cron: "45 5 * * 1-5" # 07:45 SAST
 
 concurrency:
   group: scheduled-job-search
@@ -20,15 +23,53 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check whether today's search already completed
+        id: daily_guard
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run requested; bypassing the daily guard."
+            exit 0
+          fi
+
+          today_sast="$(TZ=Africa/Johannesburg date +'%Y-%m-%d')"
+          git fetch origin main --quiet
+
+          if git show origin/main:automation/latest-run.json > /tmp/latest-run.json 2>/dev/null; then
+            conclusion="$(jq -r '.conclusion // empty' /tmp/latest-run.json)"
+            completed_at="$(jq -r '.completed_at // empty' /tmp/latest-run.json)"
+            completed_date_sast="$(
+              TZ=Africa/Johannesburg date -d "$completed_at" +'%Y-%m-%d' 2>/dev/null || true
+            )"
+
+            if [ "$conclusion" = "success" ] && [ "$completed_date_sast" = "$today_sast" ]; then
+              echo "should_run=false" >> "$GITHUB_OUTPUT"
+              echo "A successful search already completed today ($today_sast); skipping this retry."
+              exit 0
+            fi
+          fi
+
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+          echo "No successful search is recorded for today ($today_sast); running the pipeline."
+
+      - name: Search already completed
+        if: steps.daily_guard.outputs.should_run == 'false'
+        run: echo "No duplicate artifact or pointer update will be created."
+
       - uses: actions/setup-python@v5
+        if: steps.daily_guard.outputs.should_run == 'true'
         with:
           python-version: "3.12"
           cache: pip
 
       - name: Install
+        if: steps.daily_guard.outputs.should_run == 'true'
         run: pip install -e '.[dev]'
 
       - name: Restore previous job history
+        if: steps.daily_guard.outputs.should_run == 'true'
         uses: actions/cache@v4
         with:
           path: data/raw/jobs.json
@@ -37,10 +78,11 @@ jobs:
             job-history-
 
       - name: Run discovery pipeline
+        if: steps.daily_guard.outputs.should_run == 'true'
         run: job-search run-all --sources config/sources.example.json
 
       - name: Upload search results
-        if: always()
+        if: ${{ always() && steps.daily_guard.outputs.should_run == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: international-job-search-${{ github.run_number }}
@@ -52,7 +94,7 @@ jobs:
           retention-days: 30
 
       - name: Publish latest successful run pointer
-        if: success()
+        if: ${{ success() && steps.daily_guard.outputs.should_run == 'true' }}
         env:
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
