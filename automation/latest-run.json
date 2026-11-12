@@ -1,10 +1,10 @@
 {
   "workflow": "Scheduled job search",
-  "run_id": 43018140443,
-  "run_number": 124,
-  "artifact_name": "international-job-search-124",
-  "run_url": "https://github.com/TshimbiluniRSA/international-ai-job-search/actions/runs/43018140443",
-  "head_sha": "145a3c14e70a828162acd326e8c7052b77be0f09",
+  "run_id": 43157172515,
+  "run_number": 127,
+  "artifact_name": "international-job-search-127",
+  "run_url": "https://github.com/TshimbiluniRSA/international-ai-job-search/actions/runs/43157172515",
+  "head_sha": "083b315f9dae73c85c3cacd9352478d3450794d3",
   "conclusion": "success",
-  "completed_at": "2026-11-11T12:11:29Z"
+  "completed_at": "2026-11-12T04:48:44Z"
 }
